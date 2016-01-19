@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 /**
- * Created by ponne on 1/12/2016.
+ * Created by ponnex on 1/12/2016.
  */
 public class RestoDetailActivity extends AppCompatActivity {
 
