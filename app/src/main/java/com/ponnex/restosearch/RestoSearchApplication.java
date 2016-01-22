@@ -6,7 +6,10 @@ import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.ponnex.restosearch.models.Menu;
+import com.ponnex.restosearch.models.Restaurant;
 
 /**
  * Created by ponnex on 1/8/2016.
@@ -20,6 +23,8 @@ public class RestoSearchApplication extends Application{
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
+        ParseObject.registerSubclass(Restaurant.class);
+        ParseObject.registerSubclass(Menu.class);
         // Add your initialization code here
         Parse.initialize(this);
         FacebookSdk.sdkInitialize(getApplicationContext());

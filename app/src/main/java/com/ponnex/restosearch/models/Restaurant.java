@@ -13,7 +13,7 @@ public class Restaurant extends ParseObject {
 
     public Restaurant() {}
 
-    public String getName() {
+    public String getRestoName() {
         return  getString("resName");
     }
 
@@ -45,8 +45,8 @@ public class Restaurant extends ParseObject {
         put("resCoordinates", point);
     }
 
-    public ParseFile getImage() {
-        return getParseFile("resImage");
+    public String getImage() {
+        return getParseFile("resImage").getUrl();
     }
 
     public void setImage(ParseFile image){

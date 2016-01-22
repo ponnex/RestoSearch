@@ -8,7 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="175dp"
-        android:background="@color/colorPrimary2"
+        android:background="@color/colorPrimary"
         android:padding="@dimen/activity_horizontal_margin">
 
         <TextView
@@ -44,7 +44,7 @@
                 android:id="@+id/profile_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@color/colorAccent2"
+                android:src="@color/colorAccent"
                 app:civ_border_width="0dp" />
 
             <TextView
