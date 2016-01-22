@@ -7,8 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.multidex.MultiDex;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView mRecyclerView;
 
-    public String resName;
+    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
 
     RestaurantAdapter mAdapter;
 
@@ -45,16 +45,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //itemsList = (ListView) findViewById(R.id.itemslist);
         mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
+
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(findViewById(android.R.id.content), "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity
                     for (Restaurant restaurant : restaurants) {
                         RestaurantItem currentRestaurant = new RestaurantItem();
                         currentRestaurant.setName(restaurant.getRestoName());
+                        currentRestaurant.setImage(restaurant.getRestoImageUrl());
                         mRestaurant.add(currentRestaurant);
                     }
                     mAdapter.notifyDataSetChanged();

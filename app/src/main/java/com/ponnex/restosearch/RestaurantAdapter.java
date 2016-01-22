@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         RestaurantItem resto = mRestaurant.get(position);
         viewHolder.restoName.setText(resto.getName());
-        //viewHolder.countryImage.setImageDrawable(mContext.getDrawable(resto.getImageResourceId(mContext)));
+        Picasso.with(mContext).load(resto.getImage()).into(viewHolder.restoImage);
     }
 
     @Override
@@ -43,12 +46,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView restoName;
-        //public ImageView restoImage;
+        public ImageView restoImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             restoName = (TextView) itemView.findViewById(R.id.restoName);
-            //restoImage = (ImageView)itemView.findViewById(R.id.restoImage);
+            restoImage = (ImageView)itemView.findViewById(R.id.restoImage);
         }
 
     }

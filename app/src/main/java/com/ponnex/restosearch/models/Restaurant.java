@@ -45,11 +45,11 @@ public class Restaurant extends ParseObject {
         put("resCoordinates", point);
     }
 
-    public String getImage() {
+    public String getRestoImageUrl() {
         return getParseFile("resImage").getUrl();
     }
 
-    public void setImage(ParseFile image){
+    public void setRestoImageUrl(ParseFile image){
         put("resImage", image);
     }
 

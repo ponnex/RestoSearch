@@ -36,11 +36,11 @@ public class Menu extends ParseObject {
         put("resFoodPrice", foodPrice);
     }
 
-    public String getFoodImage() {
+    public String getFoodImageUrl() {
         return getParseFile("resFoodImage").getUrl();
     }
 
-    public void setFoodImage(ParseFile foodImage) {
+    public void setFoodImageUrl(ParseFile foodImage) {
         put("resFoodImage", foodImage);
     }
 }
