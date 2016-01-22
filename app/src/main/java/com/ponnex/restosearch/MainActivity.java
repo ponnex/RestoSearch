@@ -3,11 +3,12 @@ package com.ponnex.restosearch;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.multidex.MultiDex;
-import android.view.LayoutInflater;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,16 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.ponnex.restosearch.api.DataManager;
 import com.ponnex.restosearch.models.Restaurant;
 
 import java.util.ArrayList;
@@ -35,20 +30,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    List<Restaurant> allRestaurant = new ArrayList<Restaurant>();
-    BaseAdapter adapter;
+    private RecyclerView mRecyclerView;
 
-    Handler handler = new Handler();
-
-    DataManager data = DataManager.getInstance();
-
-    boolean isInitializing = true;
-
-    String listQuery = DataManager.QUERY_ALL;
-
-    ListView itemsList;
+    public String resName;
 
     RestaurantAdapter mAdapter;
+
+    private List<RestaurantItem> mRestaurant = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +45,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        itemsList = (ListView) findViewById(R.id.itemslist);
+        //itemsList = (ListView) findViewById(R.id.itemslist);
+        mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,52 +68,31 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAdapter = new RestaurantAdapter(this, new ArrayList<Restaurant>());
-        itemsList.setAdapter(mAdapter);
+        mAdapter = new RestaurantAdapter(mRestaurant, R.layout.activity_resto, this);
+        mRecyclerView.setAdapter(mAdapter);
 
         updateData();
-
     }
 
-    public class RestaurantAdapter extends ArrayAdapter<Restaurant> {
-        private Context mContext;
-        private List<Restaurant> mRestaurant;
-
-        public RestaurantAdapter (Context context, List<Restaurant> objects) {
-            super(context, R.layout.activity_resto, objects);
-            this.mContext = context;
-            this.mRestaurant = objects;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent){
-            if(convertView == null){
-                LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
-                convertView = mLayoutInflater.inflate(R.layout.activity_resto, null);
-            }
-
-            Restaurant resto = mRestaurant.get(position);
-
-            TextView restoName = (TextView) convertView.findViewById(R.id.resto_name);
-
-            restoName.setText(resto.getRestoName());
-
-            return convertView;
-        }
-    }
 
     public void updateData(){
         ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
         query.findInBackground(new FindCallback<Restaurant>() {
 
             @Override
-            public void done(List<Restaurant> tasks, ParseException error) {
-                if(tasks != null){
-                    mAdapter.clear();
-                    mAdapter.addAll(tasks);
+            public void done(List<Restaurant> restaurants, ParseException error) {
+                if(restaurants != null){
+                    for (Restaurant restaurant : restaurants) {
+                        RestaurantItem currentRestaurant = new RestaurantItem();
+                        currentRestaurant.setName(restaurant.getRestoName());
+                        mRestaurant.add(currentRestaurant);
+                    }
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         });
     }
+
 
     @Override
     protected void attachBaseContext(Context base) {

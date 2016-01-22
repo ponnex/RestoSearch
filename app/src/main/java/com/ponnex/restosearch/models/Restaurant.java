@@ -17,7 +17,7 @@ public class Restaurant extends ParseObject {
         return  getString("resName");
     }
 
-    public void setName(String name) {
+    public void setRestoName(String name) {
         put("resName", name);
     }
 

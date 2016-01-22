@@ -9,12 +9,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/app_bar_main"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/itemslist"
-        android:layout_below="@id/toolbar"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/restoList"
         android:layout_width="match_parent"
-        android:paddingBottom="20dp"
-        android:clipToPadding="false"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:context=".MainActivity" />
 
 </RelativeLayout>
