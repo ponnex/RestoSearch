@@ -5,6 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_ascending">Ascending</string>
+    <string name="action_descending">Descending</string>
+    <string name="action_search">Search</string>
+    <string name="cant_connect">No Internet connection found. Check your connection or try again.</string>
+    <string name="button_map_expand">Expand</string>
 
     <string name="parse_app_id">NALlTP5R8YRZ6Ewds2gfefhZW3TjVPcZMqfYmfSO</string>
     <string name="parse_client_key">K8RMJ45CPEu21EjYaoVpC4d6t268lmosOBzgYnLZ</string>

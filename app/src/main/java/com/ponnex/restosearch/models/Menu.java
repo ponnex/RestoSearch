@@ -18,6 +18,7 @@ public class Menu extends ParseObject {
 
     public void setFoodName(String foodName) {
         put("resFoodName", foodName);
+        put("resFoodName_search", foodName.toLowerCase().replaceAll("/[^a-zA-Z ]/g",""));
     }
 
     public String getFoodDescription() {

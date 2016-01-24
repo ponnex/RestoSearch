@@ -19,6 +19,7 @@ public class Restaurant extends ParseObject {
 
     public void setRestoName(String name) {
         put("resName", name);
+        put("resName_search", name.toLowerCase().replaceAll("/[^a-zA-Z ]/g",""));
     }
 
     public String getDescription() {
@@ -52,5 +53,4 @@ public class Restaurant extends ParseObject {
     public void setRestoImageUrl(ParseFile image){
         put("resImage", image);
     }
-
 }

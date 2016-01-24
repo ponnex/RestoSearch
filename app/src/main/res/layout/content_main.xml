@@ -12,4 +12,19 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity" />
 
+    <TextView
+        android:id="@+id/empty_state"
+        android:drawableTop="@drawable/error"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/cant_connect"/>
+
+    <ProgressBar
+        android:id="@+id/loading_resto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
 </RelativeLayout>

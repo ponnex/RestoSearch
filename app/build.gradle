@@ -40,7 +40,6 @@ dependencies {
     compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
 
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
 }
