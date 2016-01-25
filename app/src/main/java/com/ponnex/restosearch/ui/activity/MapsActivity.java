@@ -1,4 +1,4 @@
-package com.ponnex.restosearch;
+package com.ponnex.restosearch.ui.activity;
 
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ponnex.restosearch.R;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -30,20 +31,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        Intent intent = getIntent();
+        restoName = intent.getStringExtra(EXTRA_NAME);
+        coordLat = intent.getStringExtra(EXTRA_LAT);
+        coordLong = intent.getStringExtra(EXTRA_LONG);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(restoName);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
-        Intent intent = getIntent();
-        restoName = intent.getStringExtra(EXTRA_NAME);
-        coordLat = intent.getStringExtra(EXTRA_LAT);
-        coordLong = intent.getStringExtra(EXTRA_LONG);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -71,6 +73,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng RESTO_LOC = new LatLng(Double.parseDouble(coordLat), Double.parseDouble(coordLong));
         mMap.addMarker(new MarkerOptions().position(RESTO_LOC).title(restoName));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(RESTO_LOC));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17),200, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18),200, null);
     }
 }

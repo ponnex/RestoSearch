@@ -8,7 +8,7 @@ import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.ponnex.restosearch.models.Menu;
+import com.ponnex.restosearch.models.Food;
 import com.ponnex.restosearch.models.Restaurant;
 
 /**
@@ -20,11 +20,13 @@ public class RestoSearchApplication extends Application{
     public void onCreate() {
         super.onCreate();
 
+        // Register Subclass
+        ParseObject.registerSubclass(Food.class);
+        ParseObject.registerSubclass(Restaurant.class);
+
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
-        ParseObject.registerSubclass(Restaurant.class);
-        ParseObject.registerSubclass(Menu.class);
         // Add your initialization code here
         Parse.initialize(this);
         FacebookSdk.sdkInitialize(getApplicationContext());

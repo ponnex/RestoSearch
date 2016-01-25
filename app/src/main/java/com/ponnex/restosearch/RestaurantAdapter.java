@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ponnex.restosearch.ui.activity.RestoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by ponnex on 1/22/2016.
  */
-public class RestaurantAdapter extends CustomRecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private Context mContext;
     private int rowLayout;
     private List<RestaurantItem> mRestaurant;
@@ -42,7 +43,7 @@ public class RestaurantAdapter extends CustomRecyclerView.Adapter<RestaurantAdap
         viewHolder.restoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, RestoDetailActivity.class);
+                Intent intent = new Intent(mContext, RestoActivity.class);
                 intent.putExtra("coord_long", String.valueOf(resto.getCoord().getLongitude()));
                 intent.putExtra("coord_lat", String.valueOf(resto.getCoord().getLatitude()));
                 intent.putExtra("resto_name", resto.getName());

@@ -3,11 +3,12 @@ package com.ponnex.restosearch;
 /**
  * Created by ponne on 1/23/2016.
  */
-public class MenuItem {
+public class FoodItem {
 
     private String mName;
     private String mImage;
     private String mDesc;
+    private String mPrice;
 
     public String getName() {
         return mName;
@@ -23,6 +24,14 @@ public class MenuItem {
 
     public void setDesc(String desc) {
         this.mDesc = desc;
+    }
+
+    public String getPrice() {
+        return mPrice;
+    }
+
+    public void setPrice(String price) {
+        this.mPrice = price;
     }
 
     public String getImage() {

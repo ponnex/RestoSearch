@@ -7,26 +7,26 @@ import com.parse.ParseObject;
 /**
  * Created by ponnex on 1/19/2016.
  */
-@ParseClassName("Menu")
-public class Menu extends ParseObject {
+@ParseClassName("Food")
+public class Food extends ParseObject {
 
-    public Menu() {}
+    public Food() {}
 
     public String getFoodName() {
-        return getString("resFoodName");
+        return getString("resName");
     }
 
     public void setFoodName(String foodName) {
-        put("resFoodName", foodName);
-        put("resFoodName_search", foodName.toLowerCase().replaceAll("/[^a-zA-Z ]/g",""));
+        put("resName", foodName);
+        put("resName_search", foodName.toLowerCase().replaceAll("/[^a-zA-Z ]/g",""));
     }
 
     public String getFoodDescription() {
-        return getString("resFoodDescription");
+        return getString("resDescription");
     }
 
     public void setFoodDescription(String foodDescription) {
-        put("resFoodDescription", foodDescription);
+        put("resDescription", foodDescription);
     }
 
     public String getFoodPrice() {
@@ -34,14 +34,14 @@ public class Menu extends ParseObject {
     }
 
     public void setFoodPrice(String foodPrice) {
-        put("resFoodPrice", foodPrice);
+        put("resPrice", foodPrice);
     }
 
     public String getFoodImageUrl() {
-        return getParseFile("resFoodImage").getUrl();
+        return getParseFile("resImage").getUrl();
     }
 
     public void setFoodImageUrl(ParseFile foodImage) {
-        put("resFoodImage", foodImage);
+        put("resImage", foodImage);
     }
 }
