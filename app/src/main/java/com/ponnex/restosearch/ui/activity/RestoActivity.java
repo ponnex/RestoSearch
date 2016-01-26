@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import com.ponnex.restosearch.R;
 import com.ponnex.restosearch.ui.fragment.InfoFragment;
-import com.ponnex.restosearch.ui.fragment.MenuFragment;
+import com.ponnex.restosearch.ui.fragment.FoodFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,12 +34,14 @@ public class RestoActivity extends AppCompatActivity {
     public static final String EXTRA_ADD = "resto_add";
     public static final String EXTRA_LAT = "coord_lat";
     public static final String EXTRA_LONG = "coord_long";
+    public static final String EXTRA_ID = "objectId";
     public static String imageUrl;
     public static String restoName;
     public static String restoDesc;
     public static String restoAdd;
     public static String coordLat;
     public static String coordLong;
+    public static String restoId;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -56,6 +58,7 @@ public class RestoActivity extends AppCompatActivity {
         coordLong = intent.getStringExtra(EXTRA_LONG);
         restoDesc = intent.getStringExtra(EXTRA_DESC);
         restoAdd = intent.getStringExtra(EXTRA_ADD);
+        restoId = intent.getStringExtra(EXTRA_ID);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,18 +89,10 @@ public class RestoActivity extends AppCompatActivity {
         loadBackdrop();
     }
 
-    public String getrestoDesc() {
-        return restoDesc;
-    }
-
-    public String getrestoAdd() {
-        return restoAdd;
-    }
-
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new InfoFragment(), "Info");
-        adapter.addFragment(new MenuFragment(), "Menu");
+        adapter.addFragment(new FoodFragment(), "Menu");
         viewPager.setAdapter(adapter);
     }
 

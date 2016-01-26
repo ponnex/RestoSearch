@@ -1,4 +1,4 @@
-package com.ponnex.restosearch;
+package com.ponnex.restosearch.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ponnex.restosearch.R;
+import com.ponnex.restosearch.instance.RestaurantItem;
 import com.ponnex.restosearch.ui.activity.RestoActivity;
 import com.squareup.picasso.Picasso;
 
@@ -50,6 +52,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 intent.putExtra("resto_desc", resto.getDesc());
                 intent.putExtra("resto_add", resto.getAddress());
                 intent.putExtra("image_url", resto.getImage());
+                intent.putExtra("objectId", resto.getId());
                 mContext.startActivity(intent);
             }
         });

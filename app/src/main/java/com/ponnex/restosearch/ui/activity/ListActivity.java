@@ -4,8 +4,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.multidex.MultiDex;
-import android.support.v7.view.menu.MenuBuilder;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,14 +23,14 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.ponnex.restosearch.R;
-import com.ponnex.restosearch.RestaurantAdapter;
-import com.ponnex.restosearch.RestaurantItem;
+import com.ponnex.restosearch.ui.adapter.RestaurantAdapter;
+import com.ponnex.restosearch.instance.RestaurantItem;
 import com.ponnex.restosearch.models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class ListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, AppBarLayout.OnOffsetChangedListener {
 
     private RecyclerView mRecyclerView;
 
@@ -44,6 +44,10 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private ProgressBar progressBar;
 
+    private AppBarLayout appBarLayout;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private List<RestaurantItem> mRestaurant = new ArrayList<>();
 
     private boolean ascending = true;
@@ -56,6 +60,15 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        appBarLayout = (AppBarLayout)findViewById(R.id.appbar_list);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData();
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
         mRecyclerView.setHasFixedSize(true);
@@ -76,6 +89,8 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
     public void updateData(){
+        clearData();
+        removeEmptyState();
         ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
         query.findInBackground(new FindCallback<Restaurant>() {
 
@@ -89,6 +104,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                     if (restaurants != null) {
                         for (Restaurant restaurant : restaurants) {
                             RestaurantItem currentRestaurant = new RestaurantItem();
+                            currentRestaurant.setId(restaurant.getObjectId());
                             currentRestaurant.setName(restaurant.getRestoName());
                             currentRestaurant.setDesc(restaurant.getDescription());
                             currentRestaurant.setAddress(restaurant.getAddress());
@@ -97,6 +113,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                             mRestaurant.add(currentRestaurant);
                         }
                         mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
                     emptyState();
@@ -107,6 +124,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void sortAscending(){
         clearData();
+        removeEmptyState();
         ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
         query.orderByAscending("resName");
         query.findInBackground(new FindCallback<Restaurant>() {
@@ -140,6 +158,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void sortDescending(){
         clearData();
+        removeEmptyState();
         ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
         query.orderByDescending("resName");
         query.findInBackground(new FindCallback<Restaurant>() {
@@ -173,6 +192,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void itemSearch(String newText){
         clearData();
+        removeEmptyState();
         ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
         query.whereContains("resName_search", newText.toLowerCase().replaceAll("/[^a-zA-Z ]/g", ""));
         query.findInBackground(new FindCallback<Restaurant>() {
@@ -216,6 +236,12 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         progressBar.setVisibility(View.GONE);
     }
 
+    public void removeEmptyState(){
+        if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+            emptyStateTextView.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -257,7 +283,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
             }
             return true;
         } else if (id == R.id.action_account) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, LoginFacebookActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -272,5 +298,23 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        //The Refresh must be only active when the offset is zero :
+        swipeRefreshLayout.setEnabled(i == 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appBarLayout.addOnOffsetChangedListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        appBarLayout.removeOnOffsetChangedListener(this);
     }
 }

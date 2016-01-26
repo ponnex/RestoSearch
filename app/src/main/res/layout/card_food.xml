@@ -46,41 +46,64 @@
             android:paddingBottom="5dp"
             android:textSize="12sp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/numRating"
-                android:text="4.5"
+                android:id="@+id/foodPrice"
                 android:textSize="12sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:paddingRight="5dp"
-                android:paddingEnd="5dp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:layout_gravity="end|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/starRating"
-                android:text="★★★★★"
-                android:textSize="12sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/numReviews"
-                android:text="(169)"
-                android:textSize="12sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/numRating"
+                    android:text="4.5"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:paddingRight="5dp"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/starRating"
+                    android:text="★★★★★"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/numReviews"
+                    android:text="(169)"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
+                    android:layout_gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
 
     </LinearLayout>
 

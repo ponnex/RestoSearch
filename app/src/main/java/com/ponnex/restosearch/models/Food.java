@@ -30,7 +30,7 @@ public class Food extends ParseObject {
     }
 
     public String getFoodPrice() {
-        return getString("resFoodPrice");
+        return getString("resPrice");
     }
 
     public void setFoodPrice(String foodPrice) {

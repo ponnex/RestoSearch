@@ -31,10 +31,11 @@ public class InfoFragment extends Fragment {
         RestoActivity restoActivity = (RestoActivity) getActivity();
 
         TextView restoTextDesc = (TextView)view.findViewById(R.id.restoDesc);
-        restoTextDesc.setText(restoActivity.getrestoDesc());
+        restoTextDesc.setText(RestoActivity.restoDesc);
 
         TextView restoTextAdd = (TextView)view.findViewById(R.id.restoAddress);
-        restoTextAdd.setText(restoActivity.getrestoAdd());
+        restoTextAdd.setText(RestoActivity.restoAdd);
+
         return view;
     }
 }

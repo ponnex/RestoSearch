@@ -1,4 +1,4 @@
-package com.ponnex.restosearch;
+package com.ponnex.restosearch.instance;
 
 /**
  * Created by ponne on 1/23/2016.

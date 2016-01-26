@@ -1,4 +1,4 @@
-package com.ponnex.restosearch;
+package com.ponnex.restosearch.instance;
 
 import com.parse.ParseGeoPoint;
 
@@ -11,7 +11,16 @@ public class RestaurantItem {
     private String mImage;
     private String mDesc;
     private String mAddress;
+    private String mId;
     private ParseGeoPoint mPoint;
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
+    }
 
     public String getName() {
         return mName;
