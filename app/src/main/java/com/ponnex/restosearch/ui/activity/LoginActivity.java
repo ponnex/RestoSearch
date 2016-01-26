@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     CircleImageView mProfileImage;
     Button loginButton;
+    Button logoutButton;
     TextView mUsername, mEmailID;
     Profile mFbProfile;
     ParseUser parseUser;
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginButton = (Button) findViewById(R.id.login_button);
+        logoutButton = (Button) findViewById(R.id.logout_button);
         mProfileImage = (CircleImageView) findViewById(R.id.profile_image);
 
         mUsername = (TextView) findViewById(R.id.txt_name);
@@ -71,6 +73,18 @@ public class LoginActivity extends AppCompatActivity {
 
         mFbProfile = Profile.getCurrentProfile();
         callbackManager = CallbackManager.Factory.create();
+
+        parseUser = ParseUser.getCurrentUser();
+        if (parseUser != null) {
+            Log.d("MyApp", "parseUser is NOT null initially");
+            getInitialDetailsFromParse();
+            loginButton.setVisibility(View.GONE);
+            logoutButton.setVisibility(View.VISIBLE);
+        } else {
+            Log.d("MyApp", "parseUser is NULL initially");
+            loginButton.setVisibility(View.VISIBLE);
+            logoutButton.setVisibility(View.GONE);
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +105,99 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOutUser();
+            }
+        });
+    }
+
+    private void logOutUser() {
+        mUsername.setText("Name");
+        mEmailID.setText("Email");
+        loginButton.setVisibility(View.VISIBLE);
+        logoutButton.setVisibility(View.GONE);
+        mProfileImage.setImageResource(R.color.colorAccent);
+        ParseUser.logOut();
+        parseUser = ParseUser.getCurrentUser();
+    }
+
+
+    private void getInitialDetailsFromParse() {
+        //Fetch profile photo
+        try {
+            ParseFile parseFile = parseUser.getParseFile("profileThumb");
+            byte[] data = parseFile.getData();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            mProfileImage.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mEmailID.setText(parseUser.getEmail());
+        mUsername.setText(parseUser.getUsername());
+        loginButton.setVisibility(View.GONE);
+        logoutButton.setVisibility(View.VISIBLE);
+    }
+
+    private void getUserDetailsFromParse() {
+        parseUser = ParseUser.getCurrentUser();
+        //Fetch profile photo
+        try {
+            ParseFile parseFile = parseUser.getParseFile("profileThumb");
+            byte[] data = parseFile.getData();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            mProfileImage.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mEmailID.setText(parseUser.getEmail());
+        mUsername.setText(parseUser.getUsername());
+        loginButton.setVisibility(View.GONE);
+        logoutButton.setVisibility(View.VISIBLE);
+
+        Toast.makeText(LoginActivity.this, "Welcome back " + mUsername.getText().toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getUserDetailsFromFB() {
+        // Suggested by https://disqus.com/by/dominiquecanlas/
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "email,name,picture");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me",
+                parameters,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+         /* handle the result */
+                        try {
+                            email = response.getJSONObject().getString("email");
+                            mEmailID.setText(email);
+                            name = response.getJSONObject().getString("name");
+                            mUsername.setText(name);
+                            JSONObject picture = response.getJSONObject().getJSONObject("picture");
+                            JSONObject data = picture.getJSONObject("data");
+                            //  Returns a 50x50 profile picture
+                            String pictureUrl = data.getString("url");
+                            new ProfilePhotoAsync(pictureUrl).execute();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
+        loginButton.setVisibility(View.GONE);
+        logoutButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void saveNewUser() {
@@ -125,63 +232,6 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
 
-    }
-
-    private void getUserDetailsFromParse() {
-        parseUser = ParseUser.getCurrentUser();
-
-//Fetch profile photo
-        try {
-            ParseFile parseFile = parseUser.getParseFile("profileThumb");
-            byte[] data = parseFile.getData();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            mProfileImage.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mEmailID.setText(parseUser.getEmail());
-        mUsername.setText(parseUser.getUsername());
-
-        Toast.makeText(LoginActivity.this, "Welcome back " + mUsername.getText().toString(), Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void getUserDetailsFromFB() {
-        // Suggested by https://disqus.com/by/dominiquecanlas/
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "email,name,picture");
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/me",
-                parameters,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-         /* handle the result */
-                        try {
-                            email = response.getJSONObject().getString("email");
-                            mEmailID.setText(email);
-                            name = response.getJSONObject().getString("name");
-                            mUsername.setText(name);
-                            JSONObject picture = response.getJSONObject().getJSONObject("picture");
-                            JSONObject data = picture.getJSONObject("data");
-                            //  Returns a 50x50 profile picture
-                            String pictureUrl = data.getString("url");
-                            new ProfilePhotoAsync(pictureUrl).execute();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        ).executeAsync();
     }
 
     class ProfilePhotoAsync extends AsyncTask<String, String, String> {

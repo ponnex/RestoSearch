@@ -66,6 +66,7 @@
                 android:textColor="@color/abc_secondary_text_material_light" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +74,19 @@
                 android:background="@color/com_facebook_blue"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="Login via Facebook"
+                android:text="@string/login_facebook"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@color/com_facebook_blue"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/logout"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
