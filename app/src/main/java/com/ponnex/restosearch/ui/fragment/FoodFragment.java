@@ -69,9 +69,10 @@ public class FoodFragment extends Fragment {
         return view;
     }
 
-    public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onStart() {
+        super.onStart();
         updateData();
-        super.onActivityCreated(savedInstanceState);
     }
 
 

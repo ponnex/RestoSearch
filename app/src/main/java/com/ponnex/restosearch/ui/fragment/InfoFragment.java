@@ -17,6 +17,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.ponnex.restosearch.R;
 import com.ponnex.restosearch.ui.activity.RestoActivity;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -27,8 +30,8 @@ public class InfoFragment extends Fragment implements RoutingListener {
     protected LatLng start;
     protected LatLng end;
 
-    private String duration;
-    private String distance;
+    private double duration;
+    private double distance;
 
     private TextView restoTextDuration;
 
@@ -79,11 +82,19 @@ public class InfoFragment extends Fragment implements RoutingListener {
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
         for (int i = 0; i <route.size(); i++) {
             //Toast.makeText(getActivity(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
-            duration = String.valueOf(route.get(i).getDurationValue() / 60);
-            distance = String.valueOf(route.get(i).getDurationValue());
+            duration = ((double)route.get(i).getDurationValue()) / 60;
+            distance = ((double)route.get(i).getDistanceValue()) / 1000;
         }
-        restoTextDuration.setText(duration + " min");
-        restoTextDistance.setText(distance + " km");
+        restoTextDuration.setText((int)Math.round(duration) + " min");
+        restoTextDistance.setText(round(distance, 1) + " km");
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     @Override
