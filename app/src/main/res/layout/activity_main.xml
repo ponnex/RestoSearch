@@ -17,4 +17,16 @@
 
     <include layout="@layout/content_main" />
 
+    <TextView
+        android:id="@+id/empty_state"
+        android:drawableTop="@drawable/error"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="30dp"
+        android:text="@string/cant_connect"
+        android:textAlignment="center"/>
+
 </android.support.design.widget.CoordinatorLayout>

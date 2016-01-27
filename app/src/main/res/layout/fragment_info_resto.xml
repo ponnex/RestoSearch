@@ -16,17 +16,51 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:paddingTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark">
+
+                <TextView
+                    android:id="@+id/restoDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:textStyle="bold"
+                    android:paddingEnd="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/restoDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:textStyle="bold"
+                    android:paddingEnd="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/restoDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
-                android:paddingTop="30dp"
+                android:paddingTop="10dp"
                 android:paddingLeft="20dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="10dp"
                 android:background="@color/colorPrimaryDark"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />

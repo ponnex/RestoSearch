@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -32,26 +33,12 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, AppBarLayout.OnOffsetChangedListener {
 
-    private RecyclerView mRecyclerView;
-
-    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
-
     private RestaurantAdapter mAdapter;
-
-    private SearchView searchView;
-
     private TextView emptyStateTextView;
-
-    private ProgressBar progressBar;
-
     private AppBarLayout appBarLayout;
-
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private List<RestaurantItem> mRestaurant = new ArrayList<>();
-
     private boolean ascending = true;
-
     private Menu menu;
 
     @Override
@@ -66,25 +53,42 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData();
+                if (ascending) {
+                    sortAscending();
+                } else {
+                    sortDescending();
+                }
             }
         });
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
         mRecyclerView.setHasFixedSize(true);
 
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        StaggeredGridLayoutManager gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         emptyStateTextView = (TextView)findViewById(R.id.empty_state);
 
-        progressBar = (ProgressBar)findViewById(R.id.loading_resto);
-
         mAdapter = new RestaurantAdapter(mRestaurant, R.layout.card_resto, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        updateData();
+        if(savedInstanceState != null ) {
+            if (savedInstanceState.getBoolean("sortDrawable")){
+                ascending = true;
+                sortAscending();
+            } else {
+                ascending = false;
+                sortDescending();
+            }
+        } else {
+            updateData();
+        }
     }
 
 
@@ -97,9 +101,8 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void done(List<Restaurant> restaurants, ParseException error) {
                 if(error == null) {
-                    if (emptyStateTextView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                        emptyStateTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                    if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                        emptyStateTextView.setVisibility(View.GONE);
                     }
                     if (restaurants != null) {
                         for (Restaurant restaurant : restaurants) {
@@ -132,9 +135,8 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void done(List<Restaurant> restaurants, ParseException error) {
                 if (error == null) {
-                    if (emptyStateTextView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                        emptyStateTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                    if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                        emptyStateTextView.setVisibility(View.GONE);
                     }
                     if (restaurants != null) {
                         mRestaurant.clear();
@@ -148,6 +150,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                             mRestaurant.add(currentRestaurant);
                         }
                         mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
                     emptyState();
@@ -166,9 +169,8 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void done(List<Restaurant> restaurants, ParseException error) {
                 if (error == null) {
-                    if (emptyStateTextView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                        emptyStateTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                    if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                        emptyStateTextView.setVisibility(View.GONE);
                     }
                     if (restaurants != null) {
                         mRestaurant.clear();
@@ -182,6 +184,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                             mRestaurant.add(currentRestaurant);
                         }
                         mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
                     emptyState();
@@ -200,9 +203,8 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void done(List<Restaurant> restaurants, ParseException error) {
                 if (error == null) {
-                    if (emptyStateTextView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                        emptyStateTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.GONE);
+                    if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                        emptyStateTextView.setVisibility(View.GONE);
                     }
                     if (restaurants != null) {
                         mRestaurant.clear();
@@ -216,6 +218,11 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                             mRestaurant.add(currentRestaurant);
                         }
                         mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    if (mRestaurant == null) {
+                        Toast.makeText(getApplicationContext(), "List is Empty", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     emptyState();
@@ -233,7 +240,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         mRestaurant.clear();
         mAdapter.notifyDataSetChanged();
         emptyStateTextView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void removeEmptyState(){
@@ -254,9 +261,15 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+        if (ascending) {
+            menu.getItem(1).setIcon(R.drawable.ic_sort_ascending);
+        } else {
+            menu.getItem(1).setIcon(R.drawable.ic_sort_descending);
+        }
+
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(this);
         return true;
@@ -272,12 +285,12 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         if (id == R.id.action_sort) {
             if (ascending) {
                 menu.getItem(1).setIcon(R.drawable.ic_sort_descending);
-                progressBar.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(true);
                 sortDescending();
                 ascending = false;
             } else {
                 menu.getItem(1).setIcon(R.drawable.ic_sort_ascending);
-                progressBar.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(true);
                 sortAscending();
                 ascending = true;
             }
@@ -292,6 +305,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         itemSearch(newText);
+        swipeRefreshLayout.setRefreshing(true);
         return true;
     }
 
@@ -316,5 +330,15 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onPause() {
         super.onPause();
         appBarLayout.removeOnOffsetChangedListener(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (ascending) {
+            savedInstanceState.putBoolean("sortDrawable", true);
+        } else {
+            savedInstanceState.putBoolean("sortDrawable", false);
+        }
     }
 }

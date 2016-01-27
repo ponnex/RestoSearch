@@ -11,10 +11,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.ponnex.restosearch.R;
 import com.ponnex.restosearch.ui.fragment.InfoFragment;
 import com.ponnex.restosearch.ui.fragment.FoodFragment;
@@ -49,7 +56,7 @@ public class RestoActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_resto);
 
         Intent intent = getIntent();
         imageUrl = intent.getStringExtra(EXTRA_URL);
