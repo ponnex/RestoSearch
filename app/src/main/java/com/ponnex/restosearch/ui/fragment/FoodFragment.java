@@ -1,8 +1,10 @@
 package com.ponnex.restosearch.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * Created by ponne on 1/24/2016.
  */
-public class FoodFragment extends Fragment {
+public class FoodFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
     private RecyclerView mRecyclerView;
 
@@ -39,9 +41,11 @@ public class FoodFragment extends Fragment {
 
     TextView emptyStateTextView;
 
-    ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<FoodItem> mMenu = new ArrayList<>();
+
+    private boolean ascending = true;
 
     public FoodFragment() {
         // Required empty public constructor
@@ -62,7 +66,26 @@ public class FoodFragment extends Fragment {
 
         emptyStateTextView = (TextView)view.findViewById(R.id.empty_state);
 
-        progressBar = (ProgressBar)view.findViewById(R.id.loading_menu);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /*
+                if (ascending) {
+                    sortAscending();
+                } else {
+                    sortDescending();
+                }
+                */
+                updateData();
+            }
+        });
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         mAdapter = new FoodAdapter(mMenu, R.layout.card_food, fragmentActivity);
         mRecyclerView.setAdapter(mAdapter);
@@ -70,13 +93,20 @@ public class FoodFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         updateData();
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        //The Refresh must be only active when the offset is zero :
+        swipeRefreshLayout.setEnabled(verticalOffset == 0);
     }
 
 
     public void updateData(){
+        clearData();
         removeEmptyState();
         ParseQuery<ParseObject> objectId = ParseQuery.getQuery("Restaurant");
         objectId.getInBackground(RestoActivity.restoId, new GetCallback<ParseObject>() {
@@ -90,9 +120,8 @@ public class FoodFragment extends Fragment {
                         @Override
                         public void done(List<Food> menus, ParseException error) {
                             if (error == null) {
-                                if (emptyStateTextView.getVisibility() == View.VISIBLE || progressBar.getVisibility() == View.VISIBLE) {
-                                    emptyStateTextView.setVisibility(View.INVISIBLE);
-                                    progressBar.setVisibility(View.GONE);
+                                if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                                    emptyStateTextView.setVisibility(View.GONE);
                                 }
                                 if (menus != null) {
                                     for (Food menu : menus) {
@@ -104,6 +133,7 @@ public class FoodFragment extends Fragment {
                                         mMenu.add(currentMenu);
                                     }
                                     mAdapter.notifyDataSetChanged();
+                                    swipeRefreshLayout.setRefreshing(false);
                                 }
                             } else {
                                 emptyState();
@@ -117,11 +147,102 @@ public class FoodFragment extends Fragment {
         });
     }
 
+    public void sortAscending(){
+        clearData();
+        removeEmptyState();
+        ParseQuery<ParseObject> objectId = ParseQuery.getQuery("Restaurant");
+        objectId.getInBackground(RestoActivity.restoId, new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    removeEmptyState();
+                    ParseQuery<Food> query = ParseQuery.getQuery(Food.class);
+                    query.whereEqualTo("resPointer", object);
+                    query.orderByAscending("resName");
+                    query.findInBackground(new FindCallback<Food>() {
+
+                        @Override
+                        public void done(List<Food> menus, ParseException error) {
+                            if (error == null) {
+                                if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                                    emptyStateTextView.setVisibility(View.GONE);
+                                }
+                                if (menus != null) {
+                                    for (Food menu : menus) {
+                                        FoodItem currentMenu = new FoodItem();
+                                        currentMenu.setName(menu.getFoodName());
+                                        currentMenu.setDesc(menu.getFoodDescription());
+                                        currentMenu.setPrice(menu.getFoodPrice());
+                                        currentMenu.setImage(menu.getFoodImageUrl());
+                                        mMenu.add(currentMenu);
+                                    }
+                                    mAdapter.notifyDataSetChanged();
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                            } else {
+                                emptyState();
+                            }
+                        }
+                    });
+                } else {
+                    emptyState();
+                }
+            }
+        });
+    }
+
+    public void sortDescending(){
+        clearData();
+        removeEmptyState();
+        ParseQuery<ParseObject> objectId = ParseQuery.getQuery("Restaurant");
+        objectId.getInBackground(RestoActivity.restoId, new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    removeEmptyState();
+                    ParseQuery<Food> query = ParseQuery.getQuery(Food.class);
+                    query.whereEqualTo("resPointer", object);
+                    query.orderByDescending("resName");
+                    query.findInBackground(new FindCallback<Food>() {
+
+                        @Override
+                        public void done(List<Food> menus, ParseException error) {
+                            if (error == null) {
+                                if (emptyStateTextView.getVisibility() == View.VISIBLE) {
+                                    emptyStateTextView.setVisibility(View.GONE);
+                                }
+                                if (menus != null) {
+                                    for (Food menu : menus) {
+                                        FoodItem currentMenu = new FoodItem();
+                                        currentMenu.setName(menu.getFoodName());
+                                        currentMenu.setDesc(menu.getFoodDescription());
+                                        currentMenu.setPrice(menu.getFoodPrice());
+                                        currentMenu.setImage(menu.getFoodImageUrl());
+                                        mMenu.add(currentMenu);
+                                    }
+                                    mAdapter.notifyDataSetChanged();
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                            } else {
+                                emptyState();
+                            }
+                        }
+                    });
+                } else {
+                    emptyState();
+                }
+            }
+        });
+    }
+
+    public void clearData() {
+        mMenu.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
     public void emptyState() {
         mMenu.clear();
         mAdapter.notifyDataSetChanged();
         emptyStateTextView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void removeEmptyState(){
