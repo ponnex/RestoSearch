@@ -17,39 +17,55 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:contentDescription="@string/image_resto"
             android:id="@+id/foodImage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:src="@drawable/cheese_1"
             android:scaleType="centerCrop"
             android:tint="@color/photo_tint" />
 
-        <TextView
-            android:id="@+id/foodName"
-            android:gravity="start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/foodDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:textSize="12sp" />
-
-        <FrameLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_gravity="bottom"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="bottom"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/foodName"
+                    android:gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="8dp"
+                    android:text="Cheese"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/foodDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="Mozerella Cheesy"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/foodPrice"
@@ -58,52 +74,11 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:paddingRight="10dp"
+                android:text="₱ 126"
                 android:layout_gravity="end|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_margin="10dp"
-                android:layout_gravity="start|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/numRating"
-                    android:text="4.5"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:paddingRight="5dp"
-                    android:paddingEnd="5dp"
-                    android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/starRating"
-                    android:text="★★★★★"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/numReviews"
-                    android:text="(169)"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
-                    android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </FrameLayout>
-
+        </LinearLayout>
 
     </LinearLayout>
 

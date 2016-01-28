@@ -1,6 +1,5 @@
 package com.ponnex.restosearch.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -267,6 +265,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //remove previous current location Marker
         if (mCurrLocation != null) {
             mCurrLocation.remove();
+
         }
 
         start = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -318,18 +317,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         // Start marker
-        MarkerOptions options = new MarkerOptions();
-        options.position(start);
-        options.title("You");
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue));
-        mCurrLocation = mMap.addMarker(options);
+        mCurrLocation = mMap.addMarker(new MarkerOptions()
+        .position(start)
+        .title("You")
+        .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue)));
 
         // End marker
-        options = new MarkerOptions();
-        options.position(end);
-        options.title(restoName);
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
-        mRestoLocation = mMap.addMarker(options);
+        mRestoLocation = mMap.addMarker(new MarkerOptions()
+                .position(end)
+                .title(restoName)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green)));
         mRestoLocation.showInfoWindow();
 
     }
