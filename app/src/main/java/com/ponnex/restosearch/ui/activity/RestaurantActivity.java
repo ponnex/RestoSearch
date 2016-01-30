@@ -32,7 +32,7 @@ import com.ponnex.restosearch.models.Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, AppBarLayout.OnOffsetChangedListener {
+public class RestaurantActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, AppBarLayout.OnOffsetChangedListener {
 
     private RestaurantAdapter mAdapter;
     private TextView emptyStateTextView;
@@ -41,11 +41,12 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
     private List<RestaurantItem> mRestaurant = new ArrayList<>();
     private boolean ascending = true;
     private Menu menu;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_resto);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,7 +68,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
+        mRecyclerView = (RecyclerView) findViewById(R.id.restoList);
         mRecyclerView.setHasFixedSize(true);
 
         StaggeredGridLayoutManager gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
@@ -76,7 +77,7 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
 
         emptyStateTextView = (TextView)findViewById(R.id.empty_state);
 
-        mAdapter = new RestaurantAdapter(mRestaurant, R.layout.card_resto, this);
+        mAdapter = new RestaurantAdapter(mRestaurant, R.layout.activity_resto_card, this);
         mRecyclerView.setAdapter(mAdapter);
 
         if(savedInstanceState != null ) {
@@ -279,9 +280,9 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         getMenuInflater().inflate(R.menu.main, menu);
 
         if (ascending) {
-            menu.getItem(1).setIcon(R.drawable.ic_sort_ascending);
+            menu.getItem(3).setIcon(R.drawable.ic_sort_ascending);
         } else {
-            menu.getItem(1).setIcon(R.drawable.ic_sort_descending);
+            menu.getItem(3).setIcon(R.drawable.ic_sort_descending);
         }
 
         // Associate searchable configuration with the SearchView
@@ -301,19 +302,19 @@ public class ListActivity extends AppCompatActivity implements SearchView.OnQuer
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
             if (ascending) {
-                menu.getItem(1).setIcon(R.drawable.ic_sort_descending);
+                menu.getItem(3).setIcon(R.drawable.ic_sort_descending);
                 swipeRefreshLayout.setRefreshing(true);
                 sortDescending();
                 ascending = false;
             } else {
-                menu.getItem(1).setIcon(R.drawable.ic_sort_ascending);
+                menu.getItem(3).setIcon(R.drawable.ic_sort_ascending);
                 swipeRefreshLayout.setRefreshing(true);
                 sortAscending();
                 ascending = true;
             }
             return true;
         } else if (id == R.id.action_account) {
-            Intent intent = new Intent(this, LoginFacebookActivity.class);
+            Intent intent = new Intent(this, LoginThroughFBActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

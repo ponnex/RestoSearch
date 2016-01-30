@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.ponnex.restosearch.R;
 import com.ponnex.restosearch.instance.RestaurantItem;
-import com.ponnex.restosearch.ui.activity.RestoActivity;
+import com.ponnex.restosearch.ui.activity.MenuActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,25 +38,25 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final RestaurantItem resto = mRestaurant.get(position);
-        viewHolder.restoName.setText(resto.getName());
-        viewHolder.restoDesc.setText(resto.getDesc());
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+        final RestaurantItem restoItem = mRestaurant.get(position);
+        viewHolder.restoName.setText(restoItem.getName());
+        viewHolder.restoDesc.setText(restoItem.getDesc());
         viewHolder.restoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, RestoActivity.class);
-                intent.putExtra("coord_long", String.valueOf(resto.getCoord().getLongitude()));
-                intent.putExtra("coord_lat", String.valueOf(resto.getCoord().getLatitude()));
-                intent.putExtra("resto_name", resto.getName());
-                intent.putExtra("resto_desc", resto.getDesc());
-                intent.putExtra("resto_add", resto.getAddress());
-                intent.putExtra("image_url", resto.getImage());
-                intent.putExtra("objectId", resto.getId());
+                Intent intent = new Intent(mContext, MenuActivity.class);
+                intent.putExtra("coord_long", String.valueOf(restoItem.getCoord().getLongitude()));
+                intent.putExtra("coord_lat", String.valueOf(restoItem.getCoord().getLatitude()));
+                intent.putExtra("resto_name", restoItem.getName());
+                intent.putExtra("resto_desc", restoItem.getDesc());
+                intent.putExtra("resto_add", restoItem.getAddress());
+                intent.putExtra("image_url", restoItem.getImage());
+                intent.putExtra("objectId", restoItem.getId());
                 mContext.startActivity(intent);
             }
         });
-        Picasso.with(mContext).load(resto.getImage()).into(viewHolder.restoImage);
+        Picasso.with(mContext).load(restoItem.getImage()).into(viewHolder.restoImage);
     }
 
     @Override
@@ -68,6 +68,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         public TextView restoName;
         public TextView restoDesc;
         public ImageView restoImage;
+        public ImageView editMenu;
         public CardView restoCard;
 
         public ViewHolder(View itemView) {
@@ -76,6 +77,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             restoName = (TextView) itemView.findViewById(R.id.restoName);
             restoDesc = (TextView) itemView.findViewById(R.id.restoDesc);
             restoImage = (ImageView)itemView.findViewById(R.id.restoImage);
+            editMenu = (ImageView)itemView.findViewById(R.id.editMenu);
         }
     }
 }

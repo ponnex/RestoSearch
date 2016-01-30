@@ -41,7 +41,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class LoginFacebookActivity extends AppCompatActivity {
+public class LoginThroughFBActivity extends AppCompatActivity {
 
     CircleImageView mProfileImage;
     Button loginButton;
@@ -89,7 +89,7 @@ public class LoginFacebookActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginFacebookActivity.this, mPermissions, new LogInCallback() {
+                ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginThroughFBActivity.this, mPermissions, new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException err) {
                         if (user == null) {
@@ -158,7 +158,7 @@ public class LoginFacebookActivity extends AppCompatActivity {
         loginButton.setVisibility(View.GONE);
         logoutButton.setVisibility(View.VISIBLE);
 
-        Toast.makeText(LoginFacebookActivity.this, "Welcome back " + mUsername.getText().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginThroughFBActivity.this, "Welcome back " + mUsername.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
     private void getUserDetailsFromFB() {
@@ -224,7 +224,7 @@ public class LoginFacebookActivity extends AppCompatActivity {
                     parseUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            Toast.makeText(LoginFacebookActivity.this, "New user:" + name + " Signed up", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginThroughFBActivity.this, "New user:" + name + " Signed up", Toast.LENGTH_SHORT).show();
                         }
                     });
 

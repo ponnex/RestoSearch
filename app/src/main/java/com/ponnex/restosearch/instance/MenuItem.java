@@ -3,7 +3,7 @@ package com.ponnex.restosearch.instance;
 /**
  * Created by ponne on 1/23/2016.
  */
-public class FoodItem {
+public class MenuItem {
 
     private String mName;
     private String mImage;

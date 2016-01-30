@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/carditem_container"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="3dp"
+    android:animateLayoutChanges="true"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:contentDescription="@string/image_resto"
+            android:id="@+id/restoImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:src="@drawable/cheese_1"
+            android:scaleType="centerCrop"
+            android:tint="@color/photo_tint" />
+
+        <TextView
+            android:id="@+id/restoName"
+            android:gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="8dp"
+            android:text="Cheese"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/restoDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Mozerella Cheesy"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+
+</android.support.v7.widget.CardView>

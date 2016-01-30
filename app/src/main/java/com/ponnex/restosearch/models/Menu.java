@@ -8,9 +8,9 @@ import com.parse.ParseObject;
  * Created by ponnex on 1/19/2016.
  */
 @ParseClassName("Food")
-public class Food extends ParseObject {
+public class Menu extends ParseObject {
 
-    public Food() {}
+    public Menu() {}
 
     public String getFoodName() {
         return getString("resName");

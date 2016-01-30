@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.ListActivity">
+    tools:context=".ui.activity.RestaurantActivity"
+    android:fitsSystemWindows="true">
 
     <FrameLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="175dp"
         android:background="@color/colorPrimary"

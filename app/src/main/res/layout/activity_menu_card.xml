@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/carditem_container"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="3dp"
+    android:animateLayoutChanges="true"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_weight="8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="@string/image_resto"
+                android:id="@+id/foodImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/cheese_1"
+                android:scaleType="centerCrop"
+                android:tint="@color/photo_tint" />
+
+            <TextView
+                android:id="@+id/foodPrice"
+                android:textSize="13sp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="₱ 126"
+                android:textColor="@android:color/white"
+                android:layout_gravity="end|bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/foodName"
+            android:gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="8dp"
+            android:text="Cheese"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/foodDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Mozerella Cheesy"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_gravity="end|top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/editMenu"
+            android:src="@drawable/ic_more_vert"
+            android:visibility="gone"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="showPopup" />
+
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>

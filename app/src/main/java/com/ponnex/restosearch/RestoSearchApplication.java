@@ -7,8 +7,7 @@ import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.ponnex.restosearch.models.Food;
+import com.ponnex.restosearch.models.Menu;
 import com.ponnex.restosearch.models.Restaurant;
 
 /**
@@ -21,7 +20,7 @@ public class RestoSearchApplication extends Application{
         super.onCreate();
 
         // Register Subclass
-        ParseObject.registerSubclass(Food.class);
+        ParseObject.registerSubclass(Menu.class);
         ParseObject.registerSubclass(Restaurant.class);
 
         // Enable Local Datastore.

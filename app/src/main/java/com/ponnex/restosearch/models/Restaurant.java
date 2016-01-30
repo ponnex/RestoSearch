@@ -53,4 +53,8 @@ public class Restaurant extends ParseObject {
     public void setRestoImageUrl(ParseFile image){
         put("resImage", image);
     }
+
+    public ParseObject getAdmin() {
+        return getParseObject("resAdmin");
+    }
 }

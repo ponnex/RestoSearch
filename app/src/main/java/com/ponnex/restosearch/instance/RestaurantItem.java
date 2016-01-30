@@ -1,6 +1,7 @@
 package com.ponnex.restosearch.instance;
 
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 
 /**
  * Created by ponne on 1/23/2016.
@@ -13,6 +14,7 @@ public class RestaurantItem {
     private String mAddress;
     private String mId;
     private ParseGeoPoint mPoint;
+    private ParseObject mAdmin;
 
     public String getId() {
         return mId;
@@ -35,7 +37,7 @@ public class RestaurantItem {
     }
 
     public void setDesc(String desc) {
-        this.mDesc = "''" + desc + "''";
+        this.mDesc = desc;
     }
 
     public String getAddress() {
@@ -61,4 +63,5 @@ public class RestaurantItem {
     public void setImage(String image) {
         this.mImage = image;
     }
+
 }

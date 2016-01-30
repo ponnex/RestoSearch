@@ -201,7 +201,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onPause(){
         super.onPause();
-        if (mGoogleApiClient != null) {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
@@ -250,8 +250,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
+        mLocationRequest.setInterval(3000); //5 seconds
+        mLocationRequest.setFastestInterval(1000); //3 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
 

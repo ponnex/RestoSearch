@@ -2,18 +2,14 @@ package com.ponnex.restosearch.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ponnex.restosearch.instance.FoodItem;
+import com.ponnex.restosearch.instance.MenuItem;
 import com.ponnex.restosearch.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,12 +18,12 @@ import java.util.List;
 /**
  * Created by ponne on 1/25/2016.
  */
-public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
+public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private Context mContext;
     private int rowLayout;
-    private List<FoodItem> mFood;
+    private List<MenuItem> mFood;
 
-    public FoodAdapter(List<FoodItem> menus, int rowLayout, Context context) {
+    public MenuAdapter(List<MenuItem> menus, int rowLayout, Context context) {
         this.mContext = context;
         this.rowLayout = rowLayout;
         this.mFood = menus;
@@ -41,7 +37,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        final FoodItem food = mFood.get(position);
+        final MenuItem food = mFood.get(position);
         viewHolder.foodName.setText(food.getName());
         viewHolder.foodDesc.setText(food.getDesc());
         viewHolder.foodPrice.setText("₱ " + food.getPrice());
