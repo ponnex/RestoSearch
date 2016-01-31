@@ -9,6 +9,15 @@ public class MenuItem {
     private String mImage;
     private String mDesc;
     private String mPrice;
+    private String mId;
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
+    }
 
     public String getName() {
         return mName;

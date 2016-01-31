@@ -14,7 +14,6 @@ public class RestaurantItem {
     private String mAddress;
     private String mId;
     private ParseGeoPoint mPoint;
-    private ParseObject mAdmin;
 
     public String getId() {
         return mId;

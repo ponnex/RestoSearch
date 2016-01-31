@@ -93,23 +93,6 @@ public class RestaurantActivity extends AppCompatActivity implements SearchView.
         }
     }
 
-    public void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.resto_card_popmenu, popup.getMenu());
-        popup.show();
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.action_editResto) {
-                    Toast.makeText(getApplicationContext(), "Yey!", Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-        });
-    }
-
     public void updateData(){
         clearData();
         removeEmptyState();

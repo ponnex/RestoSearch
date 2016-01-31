@@ -30,48 +30,138 @@
                 android:scaleType="centerCrop"
                 android:tint="@color/photo_tint" />
 
-            <TextView
-                android:id="@+id/foodPrice"
-                android:textSize="13sp"
-                android:paddingBottom="10dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:text="₱ 126"
-                android:textColor="@android:color/white"
+            <FrameLayout
                 android:layout_gravity="end|bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_gravity="center_vertical"
+                    android:textColorHint="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_price"
+                        android:layout_gravity="end"
+                        android:hint="Price"
+                        android:inputType="number"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_gravity="end"
+                    android:id="@+id/foodPrice"
+                    android:textSize="13sp"
+                    android:paddingBottom="10dp"
+                    android:text="₱ 126"
+                    android:paddingLeft="30dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/menu_save"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingBottom="10dp"
+                android:clickable="true"
+                android:visibility="gone"
+                android:src="@drawable/ic_save"
+                android:layout_gravity="left|bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/foodName"
-            android:gravity="start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
-            android:text="Cheese"
-            android:textColor="@android:color/black" />
+        <FrameLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/foodDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:text="Mozerella Cheesy"
-            android:textSize="12sp" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_name"
+                    android:hint="Name"
+                    android:visibility="gone"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/foodName"
+                android:gravity="start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Cheese"
+                android:textColor="@android:color/black" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_description"
+                    android:hint="Description"
+                    android:visibility="gone"
+                    android:textStyle="italic"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/foodDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:text="Mozerella Cheesy"
+                android:textSize="12sp" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
     <FrameLayout
-        android:layout_gravity="end|top"
+        android:layout_gravity="end|bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -84,8 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:clickable="true"
-            android:onClick="showPopup" />
+            android:clickable="true" />
 
     </FrameLayout>
 

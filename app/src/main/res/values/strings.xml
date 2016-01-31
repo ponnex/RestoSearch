@@ -9,7 +9,7 @@
     <string name="image_food">Food Image</string>
     <string name="action_account">Account</string>
     <string name="action_sort">Sort</string>
-    <string name="action_edit">Edit Restaurant</string>
+    <string name="action_edit">Edit</string>
     <string name="action_save">Save</string>
     <string name="action_ascending">Ascending</string>
     <string name="action_descending">Descending</string>

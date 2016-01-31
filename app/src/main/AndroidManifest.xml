@@ -49,10 +49,10 @@
             android:label="@string/title_activity_login">
         </activity>
         <activity
-            android:name=".ui.activity.MenuActivity"
+            android:name=".ui.activity.MenuActivity" android:label=""
             android:parentActivityName=".ui.activity.RestaurantActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.RestaurantActivity" />
+            android:value=".ui.activity.RestaurantActivity" />
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

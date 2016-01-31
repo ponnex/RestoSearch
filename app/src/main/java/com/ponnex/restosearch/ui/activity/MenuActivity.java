@@ -21,6 +21,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -332,6 +333,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                                     mMenu.clear();
                                     for (Menu menu : menus) {
                                         MenuItem currentMenu = new MenuItem();
+                                        currentMenu.setId(menu.getObjectId());
                                         currentMenu.setName(menu.getFoodName());
                                         currentMenu.setDesc(menu.getFoodDescription());
                                         currentMenu.setPrice(menu.getFoodPrice());
@@ -376,6 +378,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                                     mMenu.clear();
                                     for (Menu menu : menus) {
                                         MenuItem currentMenu = new MenuItem();
+                                        currentMenu.setId(menu.getObjectId());
                                         currentMenu.setName(menu.getFoodName());
                                         currentMenu.setDesc(menu.getFoodDescription());
                                         currentMenu.setPrice(menu.getFoodPrice());
@@ -420,6 +423,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                                     mMenu.clear();
                                     for (Menu menu : menus) {
                                         MenuItem currentMenu = new MenuItem();
+                                        currentMenu.setId(menu.getObjectId());
                                         currentMenu.setName(menu.getFoodName());
                                         currentMenu.setDesc(menu.getFoodDescription());
                                         currentMenu.setPrice(menu.getFoodPrice());
@@ -565,6 +569,10 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                     menu.getItem(0).setVisible(false);
                     menu.getItem(1).setVisible(true);
 
+                    if (editDescription.getText().toString().equals(restoDesc) && editAddress.getText().toString().equals(restoAdd) && editRestaurant.getText().toString().equals(restoName)) {
+                        Snackbar.make(findViewById(android.R.id.content),"Are you sure you've changed something?", Snackbar.LENGTH_LONG).show();
+                    }
+
                     if (editDescription.getText().length() > 0 && !editDescription.getText().toString().equals(restoDesc)) {
 
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
@@ -591,7 +599,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                             }
                         });
 
-                    } else if (editAddress.getText().length() > 0 && !editAddress.getText().toString().equals(restoAdd)) {
+                    } if (editAddress.getText().length() > 0 && !editAddress.getText().toString().equals(restoAdd)) {
 
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
                         query.getInBackground(restoId, new GetCallback<ParseObject>() {
@@ -617,7 +625,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                             }
                         });
 
-                    } else if (editRestaurant.getText().length() > 0 && !editRestaurant.getText().toString().equals(restoName)) {
+                    } if (editRestaurant.getText().length() > 0 && !editRestaurant.getText().toString().equals(restoName)) {
 
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
                         query.getInBackground(restoId, new GetCallback<ParseObject>() {
@@ -643,8 +651,6 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                             }
                         });
 
-                    } else {
-                        Snackbar.make(findViewById(android.R.id.content),"Are you sure you've changed something?", Snackbar.LENGTH_LONG).show();
                     }
                 }
                 return false;
