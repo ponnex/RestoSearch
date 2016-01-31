@@ -3,10 +3,15 @@ package com.ponnex.restosearch.ui.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +48,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -53,6 +59,9 @@ import com.ponnex.restosearch.models.Menu;
 import com.ponnex.restosearch.ui.adapter.MenuAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -71,6 +80,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     private GoogleApiClient mGoogleApiClient;
     private CollapsingToolbarLayout collapsingToolbar;
     private EditText editDescription, editAddress, editRestaurant;
+    private static final int RESULT_LOAD_IMAGE = 1;
     private RecyclerView mRecyclerView;
     private double duration, distance;
     private AppBarLayout appBarLayout;
@@ -82,6 +92,10 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     protected LatLng start;
     protected LatLng end;
     private android.view.Menu menu;
+    private ImageView changeRestoImage, imageView;
+    private Bitmap bmp;
+    private Uri selectedImage;
+    private Boolean loadImageSuccess = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +110,19 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
         restoDesc = intent.getStringExtra(EXTRA_DESC);
         restoAdd = intent.getStringExtra(EXTRA_ADD);
         restoId = intent.getStringExtra(EXTRA_ID);
+
+        imageView = (ImageView) findViewById(R.id.backdrop);
+
+        changeRestoImage = (ImageView)findViewById(R.id.change_image);
+        changeRestoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
 
         restoTextDuration = (TextView)findViewById(R.id.restoDuration);
         restoTextDistance = (TextView)findViewById(R.id.restoDistance);
@@ -140,6 +167,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                 }
             }
         });
+
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -177,6 +205,30 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
         } else {
             updateData();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            selectedImage = data.getData();
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+
+                Picasso.with(getApplicationContext()).load(selectedImage).error(R.drawable.cheese_1).into(imageView);
+
+                loadImageSuccess = true;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -508,7 +560,6 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     }
 
     private void loadBackdrop() {
-        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         Picasso.with(this).load(imageUrl).error(R.drawable.cheese_1).into(imageView);
     }
 
@@ -565,12 +616,46 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                     editRestaurant.setVisibility(View.GONE);
                     restoTextDesc.setVisibility(View.VISIBLE);
                     restoTextAdd.setVisibility(View.VISIBLE);
+                    changeRestoImage.setVisibility(View.GONE);
                     collapsingToolbar.setTitleEnabled(true);
                     menu.getItem(0).setVisible(false);
                     menu.getItem(1).setVisible(true);
 
-                    if (editDescription.getText().toString().equals(restoDesc) && editAddress.getText().toString().equals(restoAdd) && editRestaurant.getText().toString().equals(restoName)) {
+                    if (editDescription.getText().toString().equals(restoDesc) && editAddress.getText().toString().equals(restoAdd) && editRestaurant.getText().toString().equals(restoName) && loadImageSuccess) {
                         Snackbar.make(findViewById(android.R.id.content),"Are you sure you've changed something?", Snackbar.LENGTH_LONG).show();
+                    }
+
+                    if (bmp != null && loadImageSuccess) {
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        final ParseFile newImage = new ParseFile(selectedImage.getLastPathSegment() + ".jpg", stream.toByteArray());
+
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Restaurant");
+                        query.getInBackground(restoId, new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if (e == null) {
+                                    Toast.makeText(getApplicationContext(), "Uploading...", Toast.LENGTH_LONG).show();
+                                    object.put("resImage", newImage);
+                                    object.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Toast.makeText(getApplicationContext(), "Image Saved", Toast.LENGTH_LONG).show();
+                                                Picasso.with(getApplicationContext()).load(selectedImage).error(R.drawable.cheese_1).into(imageView);
+                                                loadImageSuccess = false;
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
                     }
 
                     if (editDescription.getText().length() > 0 && !editDescription.getText().toString().equals(restoDesc)) {
@@ -670,6 +755,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                     editRestaurant.setText(restoName);
                     restoTextDesc.setVisibility(View.GONE);
                     restoTextAdd.setVisibility(View.GONE);
+                    changeRestoImage.setVisibility(View.VISIBLE);
                     collapsingToolbar.setTitleEnabled(false);
                     menu.getItem(0).setVisible(true);
                     menu.getItem(1).setVisible(false);
@@ -743,11 +829,13 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
             editDescription.setVisibility(View.GONE);
             editAddress.setVisibility(View.GONE);
             editRestaurant.setVisibility(View.GONE);
+            changeRestoImage.setVisibility(View.GONE);
             restoTextDesc.setVisibility(View.VISIBLE);
             restoTextAdd.setVisibility(View.VISIBLE);
             collapsingToolbar.setTitleEnabled(true);
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(true);
+            Picasso.with(this).load(imageUrl).error(R.drawable.cheese_1).into(imageView);
             Snackbar.make(findViewById(android.R.id.content),"Changes not saved.", Snackbar.LENGTH_LONG).show();
         } else {
             finish();

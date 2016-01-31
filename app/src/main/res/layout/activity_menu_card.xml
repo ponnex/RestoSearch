@@ -31,6 +31,21 @@
                 android:tint="@color/photo_tint" />
 
             <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/change_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:src="@drawable/ic_mode_edit" />
+
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_gravity="end|bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

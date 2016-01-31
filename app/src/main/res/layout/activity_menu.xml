@@ -44,6 +44,23 @@
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop" />
 
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/change_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:clickable="true"
+                            android:src="@drawable/ic_mode_edit" />
+
+                    </FrameLayout>
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
