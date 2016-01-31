@@ -25,7 +25,9 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.ponnex.restosearch.LoginActivityManually;
 import com.ponnex.restosearch.R;
+import com.ponnex.restosearch.SignUpActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,16 +45,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoginThroughFBActivity extends AppCompatActivity {
 
-    CircleImageView mProfileImage;
-    Button loginButton;
-    Button logoutButton;
-    TextView mUsername, mEmailID;
-    Profile mFbProfile;
-    ParseUser parseUser;
-
-    String name = null, email = null;
-
-    CallbackManager callbackManager;
+    private CircleImageView mProfileImage;
+    private Button loginButton;
+    private Button logoutButton;
+    private TextView mUsername, mEmailID;
+    private Profile mFbProfile;
+    private ParseUser parseUser;
+    private TextView signUp;
+    private String name = null, email = null;
+    private CallbackManager callbackManager;
+    private TextView signInManual;
 
     public static final List<String> mPermissions = new ArrayList<String>() {{
         add("public_profile");
@@ -62,11 +64,31 @@ public class LoginThroughFBActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_signup_facebook);
 
         loginButton = (Button) findViewById(R.id.login_button);
         logoutButton = (Button) findViewById(R.id.logout_button);
         mProfileImage = (CircleImageView) findViewById(R.id.profile_image);
+        signInManual = (TextView) findViewById(R.id.log_in);
+        signUp = (TextView) findViewById(R.id.sign_up);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginThroughFBActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        TextView logIn = (TextView) findViewById(R.id.log_in);
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginThroughFBActivity.this, LoginActivityManually.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         mUsername = (TextView) findViewById(R.id.txt_name);
         mEmailID = (TextView) findViewById(R.id.txt_email);
@@ -80,10 +102,14 @@ public class LoginThroughFBActivity extends AppCompatActivity {
             getInitialDetailsFromParse();
             loginButton.setVisibility(View.GONE);
             logoutButton.setVisibility(View.VISIBLE);
+            signUp.setVisibility(View.GONE);
+            signInManual.setVisibility(View.GONE);
         } else {
             Log.d("MyApp", "parseUser is NULL initially");
             loginButton.setVisibility(View.VISIBLE);
             logoutButton.setVisibility(View.GONE);
+            signUp.setVisibility(View.VISIBLE);
+            signInManual.setVisibility(View.VISIBLE);
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +145,8 @@ public class LoginThroughFBActivity extends AppCompatActivity {
         loginButton.setVisibility(View.VISIBLE);
         logoutButton.setVisibility(View.GONE);
         mProfileImage.setImageResource(R.color.colorAccent);
+        signUp.setVisibility(View.VISIBLE);
+        signInManual.setVisibility(View.VISIBLE);
         ParseUser.logOut();
         parseUser = ParseUser.getCurrentUser();
     }
@@ -159,6 +187,8 @@ public class LoginThroughFBActivity extends AppCompatActivity {
         logoutButton.setVisibility(View.VISIBLE);
 
         Toast.makeText(LoginThroughFBActivity.this, "Welcome back " + mUsername.getText().toString(), Toast.LENGTH_SHORT).show();
+        signUp.setVisibility(View.GONE);
+        signInManual.setVisibility(View.GONE);
     }
 
     private void getUserDetailsFromFB() {
@@ -225,6 +255,8 @@ public class LoginThroughFBActivity extends AppCompatActivity {
                         @Override
                         public void done(ParseException e) {
                             Toast.makeText(LoginThroughFBActivity.this, "New user:" + name + " Signed up", Toast.LENGTH_SHORT).show();
+                            signUp.setVisibility(View.GONE);
+                            signInManual.setVisibility(View.GONE);
                         }
                     });
 

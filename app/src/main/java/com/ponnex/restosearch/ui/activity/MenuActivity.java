@@ -3,6 +3,7 @@ package com.ponnex.restosearch.ui.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -72,7 +74,7 @@ import java.util.List;
  */
 public class MenuActivity extends AppCompatActivity implements RoutingListener, AppBarLayout.OnOffsetChangedListener, SearchView.OnQueryTextListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    public static final String EXTRA_URL = "image_url", EXTRA_NAME = "resto_name", EXTRA_DESC = "resto_desc", EXTRA_ADD = "resto_add", EXTRA_LAT = "coord_lat", EXTRA_LONG = "coord_long", EXTRA_ID = "objectId";
+    public static final String EXTRA_URL = "image_url", EXTRA_NAME = "resto_name", EXTRA_DESC = "resto_desc", EXTRA_ADD = "resto_add", EXTRA_LAT = "coord_lat", EXTRA_LONG = "coord_long", EXTRA_ID = "objectId", EXTRA_POSITION = "item_position";
     public static String imageUrl, restoName ,restoDesc, restoAdd, coordLat, coordLong, restoId;
     private TextView restoTextDuration, restoTextDistance, emptyStateTextView, restoTextDesc, restoTextAdd;
     private List<MenuItem> mMenu = new ArrayList<>();
@@ -81,6 +83,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     private CollapsingToolbarLayout collapsingToolbar;
     private EditText editDescription, editAddress, editRestaurant;
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int RESULT_LOAD_IMAGE_MENU = 2;
     private RecyclerView mRecyclerView;
     private double duration, distance;
     private AppBarLayout appBarLayout;
@@ -94,8 +97,10 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     private android.view.Menu menu;
     private ImageView changeRestoImage, imageView;
     private Bitmap bmp;
+    private static Bitmap bmpMenu;
     private Uri selectedImage;
     private Boolean loadImageSuccess = false;
+    public int sendPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -215,10 +220,32 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
             selectedImage = data.getData();
             try {
                 bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-
                 Picasso.with(getApplicationContext()).load(selectedImage).error(R.drawable.cheese_1).into(imageView);
-
                 loadImageSuccess = true;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            }
+
+        } else if (requestCode == RESULT_LOAD_IMAGE_MENU && resultCode == RESULT_OK && null != data) {
+
+            Uri selectedImageMenu = data.getData();
+            try {
+
+                bmpMenu = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageMenu);
+
+                SharedPreferences mSharedPreference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                Integer isPosition = (mSharedPreference.getInt("item_position", 0));
+
+                mAdapter.setUri(selectedImageMenu);
+                mAdapter.setBmp(bmpMenu);
+                mAdapter.setPosition(isPosition);
+
+                mAdapter.notifyDataSetChanged();
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Oops! Something went wrong. Please try again", Toast.LENGTH_LONG).show();
@@ -323,13 +350,6 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
     @Override
     public void onResume() {
         super.onResume();
-        updateData();
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
         appBarLayout.addOnOffsetChangedListener(this);
     }
 
@@ -621,7 +641,7 @@ public class MenuActivity extends AppCompatActivity implements RoutingListener, 
                     menu.getItem(0).setVisible(false);
                     menu.getItem(1).setVisible(true);
 
-                    if (editDescription.getText().toString().equals(restoDesc) && editAddress.getText().toString().equals(restoAdd) && editRestaurant.getText().toString().equals(restoName) && loadImageSuccess) {
+                    if (editDescription.getText().toString().equals(restoDesc) && editAddress.getText().toString().equals(restoAdd) && editRestaurant.getText().toString().equals(restoName) && !loadImageSuccess) {
                         Snackbar.make(findViewById(android.R.id.content),"Are you sure you've changed something?", Snackbar.LENGTH_LONG).show();
                     }
 
